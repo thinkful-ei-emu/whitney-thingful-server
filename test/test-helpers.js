@@ -245,6 +245,7 @@ function seedThingsTables(db, users, things, reviews=[]) {
 }
 
 function seedMaliciousThing(db, user, thing) {
+
   return db
     .into('thingful_users')
     .insert([user])
@@ -253,6 +254,11 @@ function seedMaliciousThing(db, user, thing) {
         .into('thingful_things')
         .insert([thing])
     )
+}
+
+function makeAuthHeader(user) {
+  const token = Buffer.from(`${user.user_name}:${user.password}`).toString('base64')
+  return `Basic ${token}`
 }
 
 module.exports = {
@@ -267,4 +273,5 @@ module.exports = {
   cleanTables,
   seedThingsTables,
   seedMaliciousThing,
+  makeAuthHeader,
 }
