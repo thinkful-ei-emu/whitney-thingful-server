@@ -3,7 +3,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Things Endpoints', function() {
+describe('Things Endpoints', function() {
   let db;
 
   const {
@@ -90,10 +90,7 @@ describe.only('Things Endpoints', function() {
     context('Given no things', () => {
 
       beforeEach(() => {
-        helpers.seedThingsTables(
-          db,
-          testUsers
-        );
+        helpers.seedUsers(db, testUsers);
       });
 
       it('responds with 404', () => {
@@ -162,11 +159,10 @@ describe.only('Things Endpoints', function() {
   describe('GET /api/things/:thing_id/reviews', () => {
     context('Given no things', () => {
       beforeEach(() => {
-        db.into('thingful_users').insert(testUsers);
+        helpers.seedUsers(db, testUsers);
       });
 
-      it('responds with 404', () => { // ---------- Failing, undefined user returned
-        console.log('Failing - should respond with 404, responding with unauthorized.');
+      it('responds with 404', () => { 
         const thingId = 123456;
         return supertest(app)
           .get(`/api/things/${thingId}/reviews`)
