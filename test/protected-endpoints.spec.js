@@ -3,7 +3,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe('Protected endpoints', () => {
+describe.only('Protected endpoints', () => {
   let db;
 
   const {
@@ -26,14 +26,14 @@ describe('Protected endpoints', () => {
 
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  beforeEach('insert things', () => 
-    helpers.seedThingsTables(
+  beforeEach('insert things', () => {
+    return helpers.seedThingsTables(
       db, 
       testUsers,
       testThings,
       testReviews
-    )
-  );
+    );
+  });
 
   const protectedEndpoints = [
     {
@@ -53,6 +53,7 @@ describe('Protected endpoints', () => {
     }
   ];
 
+  // Promise issue - all tests hang?
   protectedEndpoints.forEach(endpoint => {
     describe(endpoint.name, () => {
       it('responds with 401 "Missing bearer token" when no bearer token', () => {
