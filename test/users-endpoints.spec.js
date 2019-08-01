@@ -7,6 +7,7 @@ describe.only('Users Endpoints', () => {
   let db;
 
   const { testUsers } = helpers.makeThingsFixtures();
+  const testUser = testUsers[0];
 
   before('make knex instance', () => {
     db = knex({
@@ -103,5 +104,46 @@ describe.only('Users Endpoints', () => {
         .send(spacePassword)
         .expect(400, { error: 'Password must not start or end with a space'});
     });
+
+    context('Password complexity check', () => {
+      const passwordCheck = ['noupperc4se!', 'NOLOWERC4SE!', 'NoNumber!', 'NoSp3CiaL'];
+
+      passwordCheck.forEach(password => {
+        const simplePassword = {
+          user_name: 'test user_name',
+          password: password,
+          full_name: 'test full_name'
+        };
+
+        it('responds 400 "Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character" when password does not contain those requirements', () => {
+          return supertest(app)
+            .post('/api/users')
+            .send(simplePassword)
+            .expect(400, {error: 'Password must contain at least 1 uppercase, 1 lowercase, 1 number, and 1 special character'});
+        });
+
+        context('Inserting users', () => {
+          before('insert users', () => {
+            return helpers.seedUsers(
+              db,
+              testUsers,
+            );
+          });
+
+          it('responds 400 "Username has already been taken" if the username already exists', () => {
+            const alreadyExists = {
+              user_name: testUser.user_name,
+              password: '11AAaa!!',
+              full_name: 'test full_name',
+            };
+      
+            return supertest(app)
+              .post('/api/users')
+              .send(alreadyExists)
+              .expect(400, {error: 'Username has already been taken'});
+          });
+        });
+      });
+    }); 
   });
 });
