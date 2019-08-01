@@ -64,5 +64,18 @@ describe.only('Users Endpoints', () => {
         .send(shortPassword)
         .expect(400, { error: 'Password must be longer than 8 characters'});
     });
+
+    it('responds 400 "Password must be no longer than 72 characters" when password is more than 72 characters', () => {
+      const longPassword = {
+        user_name: 'test user_name',
+        password: '*'.repeat(73),
+        full_name: 'test full_name'
+      };
+
+      return supertest(app)
+        .post('/api/users')
+        .send(longPassword)
+        .expect(400, { error: 'Password must not be longer than 72 characters'});
+    });
   });
 });

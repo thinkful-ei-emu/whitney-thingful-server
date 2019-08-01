@@ -15,6 +15,9 @@ usersRouter
     if (password.length < 8) {
       return res.status(400).json({ error: 'Password must be longer than 8 characters'});
     }
+    if (password.length > 72) {
+      return res.status(400).json({ error: 'Password must not be longer than 72 characters'});
+    }
 
     res.send('ok');
   });
