@@ -77,5 +77,31 @@ describe.only('Users Endpoints', () => {
         .send(longPassword)
         .expect(400, { error: 'Password must not be longer than 72 characters'});
     });
+
+    it('responds 400 "Password must not start with a space" when password starts with a space', () => {
+      const spacePassword = {
+        user_name: 'test user_name',
+        password: ' spacepassword',
+        full_name: 'test full_name'
+      };
+
+      return supertest(app)
+        .post('/api/users')
+        .send(spacePassword)
+        .expect(400, { error: 'Password must not start with a space'});
+    });
+
+    it('responds 400 "Password mut not end with a space" when password ends with a space', () => {
+      const spacePassword = {
+        user_name: 'test user_name',
+        password: 'spacepassword ',
+        full_name: 'test full_name'
+      };
+
+      return supertest(app)
+        .post('/api/users')
+        .send(spacePassword)
+        .expect(400, { error: 'Password must not end with a space'});
+    });
   });
 });
