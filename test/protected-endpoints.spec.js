@@ -3,7 +3,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Protected endpoints', () => {
+describe('Protected endpoints', () => {
   let db;
 
   const {
@@ -69,7 +69,7 @@ describe.only('Protected endpoints', () => {
           .expect(401, { error: 'Unauthorized request' });
       });
 
-      it('respnds 401 "Unauthorized request" when invalid sub in payload', () => {
+      it('responds 401 "Unauthorized request" when invalid sub in payload', () => {
         const invalidUser = { user_name: 'user-not-existy', id: 1 };
         return endpoint.method(endpoint.path)
           .set('Authorization', helpers.makeAuthHeader(invalidUser))

@@ -1,3 +1,4 @@
+/*eslint no-useless-escape: 0*/
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
