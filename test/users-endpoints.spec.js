@@ -88,7 +88,7 @@ describe.only('Users Endpoints', () => {
       return supertest(app)
         .post('/api/users')
         .send(spacePassword)
-        .expect(400, { error: 'Password must not start with a space'});
+        .expect(400, { error: 'Password must not start or end with a space'});
     });
 
     it('responds 400 "Password mut not end with a space" when password ends with a space', () => {
@@ -101,7 +101,7 @@ describe.only('Users Endpoints', () => {
       return supertest(app)
         .post('/api/users')
         .send(spacePassword)
-        .expect(400, { error: 'Password must not end with a space'});
+        .expect(400, { error: 'Password must not start or end with a space'});
     });
   });
 });
