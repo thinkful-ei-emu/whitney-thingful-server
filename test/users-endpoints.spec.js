@@ -51,5 +51,18 @@ describe.only('Users Endpoints', () => {
         });
       });
     });
+
+    it('responds 400 "Password must be longer than 8 characters" when password is between 1-7 characters', () => {
+      const shortPassword = {
+        user_name: 'test user_name',
+        password: '1234567',
+        full_name: 'test full_name'
+      };
+
+      return supertest(app)
+        .post('/api/users')
+        .send(shortPassword)
+        .expect(400, { error: 'Password must be longer than 8 characters'});
+    });
   });
 });
