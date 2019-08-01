@@ -1,5 +1,6 @@
 /* eslint no-useless-escape: 0 */
 const xss = require('xss');
+const bcrypt = require('bcryptjs');
 
 const REGEX_UPPER_LOWER_NUMBER_SPECIAL = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&])[\S]+/;
 
@@ -40,6 +41,9 @@ const UsersService = {
       date_created: new Date(user.date_created),
     };
   },
+  hashPassword(password) {
+    return bcrypt.hash(password, 12);
+  }
 };
 
 module.exports = UsersService;
